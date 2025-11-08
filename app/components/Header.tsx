@@ -8,9 +8,15 @@ export default function Header() {
       <div className="flex gap-4">
         {/* 온달 Logo */}
         <div className="flex flex-col gap-[7px]">
-          <Image src="/logo.svg" alt="온달" width={200} height={371} className="h-auto w-[10vw]" />
           <Image
-            src="/logo_desc.svg"
+            src="/logos/logo_ko.svg"
+            alt="온달"
+            width={200}
+            height={371}
+            className="h-auto w-[10vw]"
+          />
+          <Image
+            src="/logos/logo_en.svg"
             alt="PECS"
             width={117.28}
             height={33.92}
@@ -21,7 +27,7 @@ export default function Header() {
         {/* 수달 Character with Speech Bubble */}
         <div className="flex items-start gap-2">
           <Image
-            src="/ondal.png"
+            src="/images/ondal.png"
             alt="온달 Logo"
             width={127}
             height={181}

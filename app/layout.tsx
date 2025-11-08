@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   },
   themeColor: "#FF7848",
   icons: {
-    icon: [{ url: "/logo_filled.png" }, { url: "/logo_filled.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/logo_filled.png" }],
+    icon: [{ url: "/logos/logo_icon.png" }],
+    apple: [{ url: "/logos/logo_icon.png" }],
   },
 };
 
