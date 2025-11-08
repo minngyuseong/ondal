@@ -33,7 +33,10 @@ export default function AddCardButton() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
 
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const startDrawing = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
+    e.preventDefault(); // 터치 시 스크롤 방지
     setIsDrawing(true);
     draw(e);
   };
@@ -47,8 +50,8 @@ export default function AddCardButton() {
     }
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing && e.type !== "mousedown") return;
+  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isDrawing && e.type !== "mousedown" && e.type !== "touchstart") return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -61,8 +64,26 @@ export default function AddCardButton() {
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
 
-    const x = (e.clientX - rect.left) * scaleX; // 비율 보정
-    const y = (e.clientY - rect.top) * scaleY;
+    // 터치 이벤트와 마우스 이벤트 구분
+    let clientX: number;
+    let clientY: number;
+
+    if ("touches" in e) {
+      // 터치 이벤트
+      if (e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        return;
+      }
+    } else {
+      // 마우스 이벤트
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
@@ -151,6 +172,9 @@ export default function AddCardButton() {
           onMouseUp={stopDrawing}
           onMouseMove={draw}
           onMouseLeave={stopDrawing}
+          onTouchStart={startDrawing}
+          onTouchEnd={stopDrawing}
+          onTouchMove={draw}
           className="aspect-square w-full cursor-crosshair rounded-xl border-4 border-gray-300"
         />
 
