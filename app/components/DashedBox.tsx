@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useCards } from "../contexts/CardContext";
+import { useCards, type CardData } from "../contexts/CardContext";
 
 interface DashedBoxProps {
   index: number;
@@ -12,7 +12,7 @@ export default function DashedBox({ index }: DashedBoxProps) {
   const { selectedCards, setSelectedCard } = useCards();
   const [isDragOver, setIsDragOver] = useState(false);
 
-  const cardImage = selectedCards[index];
+  const card = selectedCards[index];
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -27,9 +27,10 @@ export default function DashedBox({ index }: DashedBoxProps) {
     e.preventDefault();
     setIsDragOver(false);
 
-    const cardImage = e.dataTransfer.getData("cardImage");
-    if (cardImage) {
-      setSelectedCard(index, cardImage);
+    const cardDataString = e.dataTransfer.getData("cardData");
+    if (cardDataString) {
+      const cardData: CardData = JSON.parse(cardDataString);
+      setSelectedCard(index, cardData);
     }
   };
 
@@ -42,21 +43,28 @@ export default function DashedBox({ index }: DashedBoxProps) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      onClick={cardImage ? handleRemove : undefined}
+      onClick={card ? handleRemove : undefined}
       className={`relative aspect-square flex-1 overflow-hidden rounded-2xl transition-all ${
-        cardImage
+        card
           ? "border-primary-70 hover:border-primary-90 cursor-pointer border-4 border-solid bg-white"
           : "border-4 border-dashed border-white"
       } ${isDragOver ? "border-primary-100 bg-primary-20 scale-105" : ""} `}
     >
-      {cardImage && (
-        <Image
-          src={cardImage}
-          alt={`선택된 카드 ${index + 1}`}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 33vw, 20vw"
-        />
+      {card && (
+        <>
+          <Image
+            src={card.imageData}
+            alt={card.label || `선택된 카드 ${index + 1}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 33vw, 20vw"
+          />
+          {card.label && (
+            <div className="absolute right-0 bottom-0 left-0 bg-black/50 px-2 py-1 text-center text-sm text-white">
+              {card.label}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

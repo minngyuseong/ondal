@@ -11,26 +11,26 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useCards } from "../contexts/CardContext";
+import { Input } from "@/components/ui/input";
+import { useCards, type CardData } from "../contexts/CardContext";
 
 interface CardProps {
-  imageSrc: string;
-  alt?: string;
+  card: CardData;
   index: number;
 }
 
-export default function Card({ imageSrc, alt = "카드 이미지", index }: CardProps) {
+export default function Card({ card, index }: CardProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { updateCard } = useCards();
 
   const handleDragStart = (e: React.DragEvent) => {
-    e.dataTransfer.setData("cardImage", imageSrc);
+    e.dataTransfer.setData("cardData", JSON.stringify(card));
     e.dataTransfer.setData("cardIndex", index.toString());
     e.dataTransfer.effectAllowed = "copy";
   };
 
-  const handleEdit = (newImageData: string) => {
-    updateCard(index, newImageData);
+  const handleEdit = (newCard: CardData) => {
+    updateCard(index, newCard);
     setIsEditModalOpen(false);
   };
 
@@ -43,12 +43,17 @@ export default function Card({ imageSrc, alt = "카드 이미지", index }: Card
         className="relative aspect-square cursor-grab overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:shadow-lg active:cursor-grabbing"
       >
         <Image
-          src={imageSrc}
-          alt={alt}
+          src={card.imageData}
+          alt={card.label || "카드 이미지"}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 25vw, 20vw"
         />
+        {card.label && (
+          <div className="absolute right-0 bottom-0 left-0 bg-black/50 px-2 py-1 text-center text-sm text-white">
+            {card.label}
+          </div>
+        )}
       </div>
 
       {/* 수정 모달 - AddCardButton과 동일한 그리기 기능 */}
@@ -56,7 +61,7 @@ export default function Card({ imageSrc, alt = "카드 이미지", index }: Card
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         onSave={handleEdit}
-        initialImage={imageSrc}
+        initialCard={card}
       />
     </>
   );
@@ -67,17 +72,18 @@ function EditCardModal({
   isOpen,
   onClose,
   onSave,
-  initialImage,
+  initialCard,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (imageData: string) => void;
-  initialImage: string;
+  onSave: (card: CardData) => void;
+  initialCard: CardData;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState("#000000");
   const [lineWidth, setLineWidth] = useState(5);
+  const [label, setLabel] = useState(initialCard.label);
 
   const initCanvas = () => {
     const canvas = canvasRef.current;
@@ -91,10 +97,13 @@ function EditCardModal({
     img.onload = () => {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
-    img.src = initialImage;
+    img.src = initialCard.imageData;
   };
 
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const startDrawing = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
+    e.preventDefault();
     setIsDrawing(true);
     draw(e);
   };
@@ -108,8 +117,8 @@ function EditCardModal({
     }
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing && e.type !== "mousedown") return;
+  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isDrawing && e.type !== "mousedown" && e.type !== "touchstart") return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -121,8 +130,24 @@ function EditCardModal({
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
 
-    const x = (e.clientX - rect.left) * scaleX;
-    const y = (e.clientY - rect.top) * scaleY;
+    // 터치 이벤트와 마우스 이벤트 구분
+    let clientX: number;
+    let clientY: number;
+
+    if ("touches" in e) {
+      if (e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        return;
+      }
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
@@ -150,7 +175,7 @@ function EditCardModal({
     if (!canvas) return;
 
     const imageData = canvas.toDataURL("image/png");
-    onSave(imageData);
+    onSave({ imageData, label });
   };
 
   return (
@@ -199,8 +224,23 @@ function EditCardModal({
           onMouseUp={stopDrawing}
           onMouseMove={draw}
           onMouseLeave={stopDrawing}
+          onTouchStart={startDrawing}
+          onTouchEnd={stopDrawing}
+          onTouchMove={draw}
           className="aspect-square w-full cursor-crosshair rounded-xl border-4 border-gray-300"
         />
+
+        {/* 단어 입력 */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">단어:</label>
+          <Input
+            type="text"
+            placeholder="카드에 표시할 단어를 입력하세요"
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            className="w-full"
+          />
+        </div>
 
         <DialogFooter className="gap-4">
           <DialogClose asChild>

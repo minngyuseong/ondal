@@ -2,21 +2,26 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 
+export interface CardData {
+  imageData: string;
+  label: string;
+}
+
 interface CardContextType {
-  cardImages: string[];
-  addCard: (imageData: string) => void;
-  updateCard: (index: number, imageData: string) => void;
-  selectedCards: (string | null)[]; // DashedBox에 놓인 카드들 (최대 3개)
-  setSelectedCard: (boxIndex: number, cardImageOrNull: string | null) => void;
+  cards: CardData[];
+  addCard: (card: CardData) => void;
+  updateCard: (index: number, card: CardData) => void;
+  selectedCards: (CardData | null)[]; // DashedBox에 놓인 카드들 (최대 3개)
+  setSelectedCard: (boxIndex: number, cardOrNull: CardData | null) => void;
 }
 
 const CardContext = createContext<CardContextType | undefined>(undefined);
 
 // 초기 상태를 함수로 지연 로드
-function getInitialCards(): string[] {
+function getInitialCards(): CardData[] {
   if (typeof window === "undefined") return [];
 
-  const saved = localStorage.getItem("cardImages");
+  const saved = localStorage.getItem("cards");
   if (saved) {
     try {
       return JSON.parse(saved);
@@ -29,38 +34,36 @@ function getInitialCards(): string[] {
 }
 
 export function CardProvider({ children }: { children: ReactNode }) {
-  const [cardImages, setCardImages] = useState<string[]>(getInitialCards);
-  const [selectedCards, setSelectedCards] = useState<(string | null)[]>([null, null, null]);
+  const [cards, setCards] = useState<CardData[]>(getInitialCards);
+  const [selectedCards, setSelectedCards] = useState<(CardData | null)[]>([null, null, null]);
 
-  const addCard = (imageData: string) => {
-    setCardImages((prev) => {
-      const newCards = [...prev, imageData];
-      localStorage.setItem("cardImages", JSON.stringify(newCards));
+  const addCard = (card: CardData) => {
+    setCards((prev) => {
+      const newCards = [...prev, card];
+      localStorage.setItem("cards", JSON.stringify(newCards));
       return newCards;
     });
   };
 
-  const updateCard = (index: number, imageData: string) => {
-    setCardImages((prev) => {
+  const updateCard = (index: number, card: CardData) => {
+    setCards((prev) => {
       const newCards = [...prev];
-      newCards[index] = imageData;
-      localStorage.setItem("cardImages", JSON.stringify(newCards));
+      newCards[index] = card;
+      localStorage.setItem("cards", JSON.stringify(newCards));
       return newCards;
     });
   };
 
-  const setSelectedCard = (boxIndex: number, cardImageOrNull: string | null) => {
+  const setSelectedCard = (boxIndex: number, cardOrNull: CardData | null) => {
     setSelectedCards((prev) => {
       const newSelected = [...prev];
-      newSelected[boxIndex] = cardImageOrNull;
+      newSelected[boxIndex] = cardOrNull;
       return newSelected;
     });
   };
 
   return (
-    <CardContext.Provider
-      value={{ cardImages, addCard, updateCard, selectedCards, setSelectedCard }}
-    >
+    <CardContext.Provider value={{ cards, addCard, updateCard, selectedCards, setSelectedCard }}>
       {children}
     </CardContext.Provider>
   );

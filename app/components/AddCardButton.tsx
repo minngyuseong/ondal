@@ -20,6 +20,7 @@ export default function AddCardButton() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState("#000000");
   const [lineWidth, setLineWidth] = useState(5);
+  const [label, setLabel] = useState("");
   const { addCard } = useCards();
 
   const initCanvas = () => {
@@ -111,7 +112,8 @@ export default function AddCardButton() {
     if (!canvas) return;
 
     const imageData = canvas.toDataURL("image/png");
-    addCard(imageData);
+    addCard({ imageData, label });
+    setLabel(""); // 저장 후 초기화
     // Dialog가 자동으로 닫힘 (DialogClose 버튼 클릭됨)
   };
 
@@ -177,6 +179,18 @@ export default function AddCardButton() {
           onTouchMove={draw}
           className="aspect-square w-full cursor-crosshair rounded-xl border-4 border-gray-300"
         />
+
+        {/* 단어 입력 */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">단어:</label>
+          <Input
+            type="text"
+            placeholder="카드에 표시할 단어를 입력하세요"
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            className="w-full"
+          />
+        </div>
 
         <DialogFooter className="gap-4">
           <DialogClose asChild>
