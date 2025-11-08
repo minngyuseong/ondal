@@ -14,6 +14,19 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: "온달",
   description: "어떤 단어 카드를 골라가서 맨 아래의 반칸에 낱글 재생 버튼을 눌러보세요!",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+  },
+  themeColor: "#FF7848",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
