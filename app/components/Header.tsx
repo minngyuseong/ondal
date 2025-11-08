@@ -28,8 +28,8 @@ export default function Header() {
             className="-mt-5 h-auto w-[12vw]"
           />
           <SpeechBubble>
-            아래의 단어 카드를 끌어당겨서 맨 아래의 빈칸에 넣고 재생 버튼을 누르면 음성이 순서대로
-            흘러나와요!
+            아래의 단어 카드를 끌어당겨서 <br />맨 아래의 빈칸에 넣고 재생 버튼을 누르면 <br />
+            음성이 순서대로 흘러나와요!
           </SpeechBubble>
         </div>
       </div>

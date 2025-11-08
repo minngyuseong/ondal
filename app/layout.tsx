@@ -16,9 +16,14 @@ export const metadata: Metadata = {
   description: "어떤 단어 카드를 골라가서 맨 아래의 반칸에 낱글 재생 버튼을 눌러보세요!",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
+    title: "온달",
   },
   themeColor: "#FF7848",
+  icons: {
+    icon: [{ url: "/logo_filled.png" }, { url: "/logo_filled.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/logo_filled.png" }],
+  },
 };
 
 export const viewport = {
