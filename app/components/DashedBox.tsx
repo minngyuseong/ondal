@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useCards, type CardData } from "../contexts/CardContext";
+import CardImage from "./CardImage";
 
 interface DashedBoxProps {
   index: number;
@@ -44,27 +44,20 @@ export default function DashedBox({ index }: DashedBoxProps) {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={card ? handleRemove : undefined}
-      className={`relative aspect-square flex-1 overflow-hidden rounded-2xl transition-all ${
+      className={`relative aspect-square cursor-pointer overflow-hidden rounded-2xl bg-white p-4 shadow-md transition-all ${
         card
-          ? "border-primary-70 hover:border-primary-90 cursor-pointer border-4 border-solid bg-white"
-          : "border-4 border-dashed border-white"
-      } ${isDragOver ? "border-primary-100 bg-primary-20 scale-105" : ""} `}
+          ? "border-primary-70 hover:border-primary-90 border-4 border-solid hover:shadow-lg"
+          : "border-4 border-dashed border-gray-300"
+      } ${isDragOver ? "border-primary-100 bg-primary-20" : ""} `}
     >
-      {card && (
-        <>
-          <Image
-            src={card.imageData}
-            alt={card.label || `선택된 카드 ${index + 1}`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 33vw, 20vw"
-          />
-          {card.label && (
-            <div className="absolute right-0 bottom-0 left-0 bg-black/50 px-2 py-1 text-center text-sm text-white">
-              {card.label}
-            </div>
-          )}
-        </>
+      {card ? (
+        <div className="relative h-full w-full">
+          <CardImage card={card} />
+        </div>
+      ) : (
+        <div className="flex h-full w-full items-center justify-center text-gray-400">
+          카드를 드래그하세요
+        </div>
       )}
     </div>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCards, type CardData } from "../contexts/CardContext";
+import CardImage from "./CardImage";
 
 interface CardProps {
   card: CardData;
@@ -40,20 +40,11 @@ export default function Card({ card, index }: CardProps) {
         draggable
         onDragStart={handleDragStart}
         onClick={() => setIsEditModalOpen(true)}
-        className="relative aspect-square cursor-grab overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:shadow-lg active:cursor-grabbing"
+        className="relative aspect-square cursor-grab overflow-hidden rounded-2xl bg-white p-4 shadow-md transition-all hover:shadow-lg active:cursor-grabbing"
       >
-        <Image
-          src={card.imageData}
-          alt={card.label || "카드 이미지"}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 25vw, 20vw"
-        />
-        {card.label && (
-          <div className="absolute right-0 bottom-0 left-0 bg-black/50 px-2 py-1 text-center text-sm text-white">
-            {card.label}
-          </div>
-        )}
+        <div className="relative h-full w-full">
+          <CardImage card={card} />
+        </div>
       </div>
 
       {/* 수정 모달 - AddCardButton과 동일한 그리기 기능 */}
