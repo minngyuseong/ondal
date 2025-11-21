@@ -13,6 +13,7 @@ interface CardContextType {
   updateCard: (index: number, card: CardData) => void;
   selectedCards: (CardData | null)[]; // DashedBox에 놓인 카드들 (최대 3개)
   setSelectedCard: (boxIndex: number, cardOrNull: CardData | null) => void;
+  resetSelectedCards: () => void; // 선택된 카드 초기화
 }
 
 const CardContext = createContext<CardContextType | undefined>(undefined);
@@ -73,6 +74,9 @@ const DEFAULT_CARDS: CardData[] = [
   },
 ];
 
+// 기본 카드 개수를 export하여 Card 컴포넌트에서 사용
+export const DEFAULT_CARDS_COUNT = DEFAULT_CARDS.length;
+
 // 초기 상태를 함수로 지연 로드
 function getInitialCards(): CardData[] {
   // 항상 기본 카드를 반환 (새로고침 시 초기화)
@@ -103,8 +107,14 @@ export function CardProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const resetSelectedCards = () => {
+    setSelectedCards([null, null, null]);
+  };
+
   return (
-    <CardContext.Provider value={{ cards, addCard, updateCard, selectedCards, setSelectedCard }}>
+    <CardContext.Provider
+      value={{ cards, addCard, updateCard, selectedCards, setSelectedCard, resetSelectedCards }}
+    >
       {children}
     </CardContext.Provider>
   );

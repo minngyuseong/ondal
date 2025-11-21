@@ -6,7 +6,7 @@ import { useCards } from "../contexts/CardContext";
 import { useState } from "react";
 
 export default function ActionButtons() {
-  const { selectedCards } = useCards();
+  const { selectedCards, resetSelectedCards } = useCards();
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlay = async () => {
@@ -51,8 +51,7 @@ export default function ActionButtons() {
   };
 
   const handleReset = () => {
-    console.log("카드 배치 초기화");
-    // TODO: selectedCards를 모두 null로 리셋
+    resetSelectedCards();
   };
 
   return (
@@ -66,7 +65,7 @@ export default function ActionButtons() {
         <span className="flex items-center gap-3">
           <Image src="/icons/speaker.svg" alt="재생" width={38} height={38} />
           <span className="text-sm font-medium">
-            {isPlaying ? "재생 중..." : "배치 카드 음성 재생"}
+            {isPlaying ? "재생 중..." : "놓은 카드 음성 재생"}
           </span>
         </span>
       </Button>
@@ -77,7 +76,7 @@ export default function ActionButtons() {
       >
         <span className="flex items-center gap-3">
           <Image src="/icons/refresh.svg" alt="초기화" width={38} height={38} />
-          <span className="text-sm font-medium">카드 배치 세로 고쳐</span>
+          <span className="text-sm font-medium">카드 배치 세로 고침</span>
         </span>
       </Button>
     </div>

@@ -44,16 +44,14 @@ export default function DashedBox({ index }: DashedBoxProps) {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={card ? handleRemove : undefined}
-      className={`relative aspect-square cursor-pointer overflow-hidden rounded-2xl bg-white p-4 shadow-md transition-all ${
+      className={`aspect-square h-full w-full cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition-all ${
         card
           ? "border-primary-70 hover:border-primary-90 border-4 border-solid hover:shadow-lg"
           : "border-4 border-dashed border-gray-300"
       } ${isDragOver ? "border-primary-100 bg-primary-20" : ""} `}
     >
       {card ? (
-        <div className="relative h-full w-full">
-          <CardImage card={card} />
-        </div>
+        <CardImage card={card} />
       ) : (
         <div className="flex h-full w-full items-center justify-center text-gray-400">
           카드를 드래그하세요

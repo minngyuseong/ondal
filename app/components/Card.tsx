@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useCards, type CardData } from "../contexts/CardContext";
+import { useCards, type CardData, DEFAULT_CARDS_COUNT } from "../contexts/CardContext";
 import CardImage from "./CardImage";
 
 interface CardProps {
@@ -22,6 +22,9 @@ interface CardProps {
 export default function Card({ card, index }: CardProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { updateCard } = useCards();
+
+  // 기본 카드인지 확인 (index가 DEFAULT_CARDS_COUNT보다 작으면 기본 카드)
+  const isDefaultCard = index < DEFAULT_CARDS_COUNT;
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData("cardData", JSON.stringify(card));
@@ -34,17 +37,24 @@ export default function Card({ card, index }: CardProps) {
     setIsEditModalOpen(false);
   };
 
+  const handleClick = () => {
+    // 기본 카드는 수정 불가
+    if (!isDefaultCard) {
+      setIsEditModalOpen(true);
+    }
+  };
+
   return (
     <>
       <div
         draggable
         onDragStart={handleDragStart}
-        onClick={() => setIsEditModalOpen(true)}
-        className="relative aspect-square cursor-grab overflow-hidden rounded-2xl bg-white p-4 shadow-md transition-all hover:shadow-lg active:cursor-grabbing"
+        onClick={handleClick}
+        className={`aspect-square overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:shadow-lg ${
+          isDefaultCard ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"
+        }`}
       >
-        <div className="relative h-full w-full">
-          <CardImage card={card} />
-        </div>
+        <CardImage card={card} />
       </div>
 
       {/* 수정 모달 - AddCardButton과 동일한 그리기 기능 */}
