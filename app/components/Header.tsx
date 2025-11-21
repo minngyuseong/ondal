@@ -7,9 +7,13 @@ export default function Header() {
     <header className="flex justify-between">
       <div className="flex gap-4">
         {/* 온달 Logo */}
-        <div className="flex flex-col gap-[7px]">
-          <object data="/logos/logo_ko.svg" className="w-[10vw]" />
-          <object data="/logos/logo_en.svg" className="w-[10vw]" />
+        <div className="flex flex-col gap-1.5">
+          <div>
+            <object data="/logos/logo_ko.svg" className="h-auto w-[12vw]" />
+          </div>
+          <div>
+            <object data="/logos/logo_en.svg" className="h-auto w-[12vw]" />
+          </div>
         </div>
 
         {/* 수달 Character with Speech Bubble */}

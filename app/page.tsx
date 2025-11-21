@@ -8,7 +8,7 @@ export default function Home() {
     <CardProvider>
       <div className="bg-primary-100 flex min-h-screen flex-col p-13">
         <Header />
-        <div className="-mt-[4vw]">
+        <div className="-mt-[4.5vw]">
           <CardGrid />
         </div>
         <BottomSection />
