@@ -23,7 +23,7 @@ export default function Header() {
             alt="온달 Logo"
             width={127}
             height={181}
-            className="-mt-5 h-auto w-[12vw]"
+            className="-mt-5 h-auto w-[13vw]"
           />
           <SpeechBubble>
             아래의 단어 카드를 끌어당겨서 <br />맨 아래의 빈칸에 넣고 재생 버튼을 누르면 <br />
