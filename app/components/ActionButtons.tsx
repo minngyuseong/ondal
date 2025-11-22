@@ -62,9 +62,9 @@ export default function ActionButtons() {
         variant="outline"
         className="h-20 rounded-2xl bg-white px-6 py-4 shadow-md hover:scale-105 hover:shadow-lg active:scale-95 disabled:opacity-50"
       >
-        <span className="flex items-center gap-3">
+        <span className="flex items-center justify-center gap-3">
           <Image src="/icons/speaker.svg" alt="재생" width={38} height={38} />
-          <span className="text-sm font-medium">
+          <span className="text-lg font-semibold">
             {isPlaying ? "재생 중..." : "놓은 카드 음성 재생"}
           </span>
         </span>
@@ -74,9 +74,9 @@ export default function ActionButtons() {
         variant="outline"
         className="h-auto rounded-2xl bg-white px-6 py-4 shadow-md hover:scale-105 hover:shadow-lg active:scale-95"
       >
-        <span className="flex items-center gap-3">
+        <span className="flex items-center justify-center gap-3">
           <Image src="/icons/refresh.svg" alt="초기화" width={38} height={38} />
-          <span className="text-sm font-medium">카드 배치 세로 고침</span>
+          <span className="text-lg font-semibold">놓은 카드 처음으로</span>
         </span>
       </Button>
     </div>

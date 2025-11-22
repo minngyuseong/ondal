@@ -13,7 +13,7 @@ export default function CardImage({ card }: CardImageProps) {
           src={card.imageData}
           alt={card.label || "카드 이미지"}
           fill
-          className="object-contain"
+          className="object-contain pb-9"
         />
         {card.label && (
           <div className="bg-secondary absolute right-0 bottom-0 left-0 rounded-md py-1 text-center text-lg">

@@ -123,10 +123,10 @@ export default function AddCardButton() {
         <Button
           variant="outline"
           size="lg"
-          className="h-20 gap-[15px] rounded-[20px] bg-white px-[26px] shadow-lg"
+          className="h-20 gap-[15px] rounded-[20px] bg-white px-[26px] shadow-lg hover:scale-105 hover:shadow-lg active:scale-95 disabled:opacity-50"
         >
           <Image src="icons/plus.svg" alt="추가하기" width={38} height={38} />
-          <span>새로운 카드 추가하기</span>
+          <span className="text-lg font-semibold">새로운 카드 추가하기</span>
         </Button>
       </DialogTrigger>
 

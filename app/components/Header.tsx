@@ -9,10 +9,10 @@ export default function Header() {
         {/* 온달 Logo */}
         <div className="flex flex-col gap-1.5">
           <div>
-            <object data="/logos/logo_ko.svg" className="h-auto w-[12vw]" />
+            <object data="/logos/logo_ko.svg" className="h-auto w-[11vw]" />
           </div>
           <div>
-            <object data="/logos/logo_en.svg" className="h-auto w-[12vw]" />
+            <object data="/logos/logo_en.svg" className="h-auto w-[11vw]" />
           </div>
         </div>
 
