@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +11,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import IconButton from "./IconButton";
 import { Input } from "@/components/ui/input";
 import { useCards } from "../contexts/CardContext";
 
@@ -120,14 +120,7 @@ export default function AddCardButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="lg"
-          className="h-20 gap-[15px] rounded-[20px] bg-white px-[26px] shadow-lg hover:scale-105 hover:shadow-lg active:scale-95 disabled:opacity-50"
-        >
-          <Image src="icons/plus.svg" alt="추가하기" width={38} height={38} />
-          <span className="text-lg font-semibold">새로운 카드 추가하기</span>
-        </Button>
+        <IconButton icon="/icons/plus.svg" alt="추가하기" text="새로운 카드 추가하기" />
       </DialogTrigger>
 
       <DialogContent className="max-w-2xl" onOpenAutoFocus={initCanvas}>

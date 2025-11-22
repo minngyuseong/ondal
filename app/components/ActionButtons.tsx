@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import IconButton from "./IconButton";
 import { useCards } from "../contexts/CardContext";
 import { useState } from "react";
 
@@ -55,30 +54,20 @@ export default function ActionButtons() {
   };
 
   return (
-    <div className="flex w-48 flex-col gap-4">
-      <Button
+    <div className="flex flex-col gap-4">
+      <IconButton
+        icon="/icons/speaker.svg"
+        alt="재생"
+        text={isPlaying ? "재생 중..." : "놓은 카드 음성 재생"}
         onClick={handlePlay}
         disabled={isPlaying}
-        variant="outline"
-        className="h-20 rounded-2xl bg-white px-6 py-4 shadow-md hover:scale-105 hover:shadow-lg active:scale-95 disabled:opacity-50"
-      >
-        <span className="flex items-center justify-center gap-3">
-          <Image src="/icons/speaker.svg" alt="재생" width={38} height={38} />
-          <span className="text-lg font-semibold">
-            {isPlaying ? "재생 중..." : "놓은 카드 음성 재생"}
-          </span>
-        </span>
-      </Button>
-      <Button
+      />
+      <IconButton
+        icon="/icons/refresh.svg"
+        alt="초기화"
+        text="놓은 카드 처음으로"
         onClick={handleReset}
-        variant="outline"
-        className="h-auto rounded-2xl bg-white px-6 py-4 shadow-md hover:scale-105 hover:shadow-lg active:scale-95"
-      >
-        <span className="flex items-center justify-center gap-3">
-          <Image src="/icons/refresh.svg" alt="초기화" width={38} height={38} />
-          <span className="text-lg font-semibold">놓은 카드 처음으로</span>
-        </span>
-      </Button>
+      />
     </div>
   );
 }
