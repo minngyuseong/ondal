@@ -23,7 +23,8 @@ export default function Card({ card, index }: CardProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartTime = useRef<number>(0);
-  const { updateCard } = useCards();
+  const dragStartPos = useRef<{ x: number; y: number } | null>(null);
+  const { updateCard, setDraggingCard, setGhostPos, clearDrag } = useCards();
 
   // 기본 카드인지 확인 (index가 DEFAULT_CARDS_COUNT보다 작으면 기본 카드)
   const isDefaultCard = index < DEFAULT_CARDS_COUNT;
@@ -41,13 +42,23 @@ export default function Card({ card, index }: CardProps) {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     dragStartTime.current = Date.now();
+    const touch = e.touches[0];
+    dragStartPos.current = { x: touch.clientX, y: touch.clientY };
+    setDraggingCard(card, index);
+    setGhostPos({ x: touch.clientX, y: touch.clientY });
+    setIsDragging(true); // 터치 시작하자마자 드래그 시작
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    // 터치 후 즉시 드래그 시작 (1ms 이내)
-    if (Date.now() - dragStartTime.current < 1) {
-      e.preventDefault();
-    }
+    const touch = e.touches[0];
+    setGhostPos({ x: touch.clientX, y: touch.clientY });
+    e.preventDefault(); // 스크롤 방지
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    dragStartPos.current = null;
+    clearDrag();
   };
 
   const handleEdit = (newCard: CardData) => {
@@ -73,6 +84,7 @@ export default function Card({ card, index }: CardProps) {
         onDragEnd={handleDragEnd}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         onClick={handleClick}
         className={`aspect-square touch-none overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:shadow-lg ${
           isDefaultCard ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"

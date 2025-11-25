@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useCards, type CardData } from "../contexts/CardContext";
 import CardImage from "./CardImage";
 
@@ -9,10 +9,25 @@ interface DashedBoxProps {
 }
 
 export default function DashedBox({ index }: DashedBoxProps) {
-  const { selectedCards, setSelectedCard } = useCards();
+  const { selectedCards, setSelectedCard, draggingCard, ghostPos, clearDrag } = useCards();
   const [isDragOver, setIsDragOver] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
 
   const card = selectedCards[index];
+
+  useEffect(() => {
+    if (!draggingCard || !ghostPos || !boxRef.current) return;
+    const rect = boxRef.current.getBoundingClientRect();
+    if (
+      ghostPos.x > rect.left &&
+      ghostPos.x < rect.right &&
+      ghostPos.y > rect.top &&
+      ghostPos.y < rect.bottom
+    ) {
+      setSelectedCard(index, draggingCard);
+      clearDrag();
+    }
+  }, [ghostPos, draggingCard, index, setSelectedCard, clearDrag]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -40,6 +55,7 @@ export default function DashedBox({ index }: DashedBoxProps) {
 
   return (
     <div
+      ref={boxRef}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}

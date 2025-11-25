@@ -11,9 +11,15 @@ interface CardContextType {
   cards: CardData[];
   addCard: (card: CardData) => void;
   updateCard: (index: number, card: CardData) => void;
-  selectedCards: (CardData | null)[]; // DashedBox에 놓인 카드들 (최대 3개)
+  selectedCards: (CardData | null)[];
   setSelectedCard: (boxIndex: number, cardOrNull: CardData | null) => void;
-  resetSelectedCards: () => void; // 선택된 카드 초기화
+  resetSelectedCards: () => void;
+  draggingCard: CardData | null;
+  draggingCardIndex: number | null;
+  ghostPos: { x: number; y: number } | null;
+  setDraggingCard: (card: CardData | null, index: number | null) => void;
+  setGhostPos: (pos: { x: number; y: number } | null) => void;
+  clearDrag: () => void;
 }
 
 const CardContext = createContext<CardContextType | undefined>(undefined);
@@ -86,6 +92,9 @@ function getInitialCards(): CardData[] {
 export function CardProvider({ children }: { children: ReactNode }) {
   const [cards, setCards] = useState<CardData[]>(getInitialCards);
   const [selectedCards, setSelectedCards] = useState<(CardData | null)[]>([null, null, null]);
+  const [draggingCard, setDraggingCardState] = useState<CardData | null>(null);
+  const [draggingCardIndex, setDraggingCardIndex] = useState<number | null>(null);
+  const [ghostPos, setGhostPosState] = useState<{ x: number; y: number } | null>(null);
 
   const addCard = (card: CardData) => {
     setCards((prev) => [...prev, card]);
@@ -111,9 +120,37 @@ export function CardProvider({ children }: { children: ReactNode }) {
     setSelectedCards([null, null, null]);
   };
 
+  const setDraggingCard = (card: CardData | null, index: number | null) => {
+    setDraggingCardState(card);
+    setDraggingCardIndex(index);
+  };
+
+  const setGhostPos = (pos: { x: number; y: number } | null) => {
+    setGhostPosState(pos);
+  };
+
+  const clearDrag = () => {
+    setDraggingCardState(null);
+    setDraggingCardIndex(null);
+    setGhostPosState(null);
+  };
+
   return (
     <CardContext.Provider
-      value={{ cards, addCard, updateCard, selectedCards, setSelectedCard, resetSelectedCards }}
+      value={{
+        cards,
+        addCard,
+        updateCard,
+        selectedCards,
+        setSelectedCard,
+        resetSelectedCards,
+        draggingCard,
+        draggingCardIndex,
+        ghostPos,
+        setDraggingCard,
+        setGhostPos,
+        clearDrag,
+      }}
     >
       {children}
     </CardContext.Provider>
