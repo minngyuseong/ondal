@@ -44,8 +44,8 @@ export default function Card({ card, index }: CardProps) {
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    // 터치 후 즉시 드래그 시작 (100ms 이내)
-    if (Date.now() - dragStartTime.current < 100) {
+    // 터치 후 즉시 드래그 시작 (1ms 이내)
+    if (Date.now() - dragStartTime.current < 1) {
       e.preventDefault();
     }
   };
