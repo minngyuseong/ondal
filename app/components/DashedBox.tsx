@@ -9,7 +9,7 @@ interface DashedBoxProps {
 }
 
 export default function DashedBox({ index }: DashedBoxProps) {
-  const { selectedCards, setSelectedCard, draggingCard, ghostPos, clearDrag } = useCards();
+  const { selectedCards, setSelectedCard, draggingCard, ghostPos, setDropTargetIndex } = useCards();
   const [isDragOver, setIsDragOver] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -18,16 +18,14 @@ export default function DashedBox({ index }: DashedBoxProps) {
   useEffect(() => {
     if (!draggingCard || !ghostPos || !boxRef.current) return;
     const rect = boxRef.current.getBoundingClientRect();
-    if (
+    const isOver =
       ghostPos.x > rect.left &&
       ghostPos.x < rect.right &&
       ghostPos.y > rect.top &&
-      ghostPos.y < rect.bottom
-    ) {
-      setSelectedCard(index, draggingCard);
-      clearDrag();
-    }
-  }, [ghostPos, draggingCard, index, setSelectedCard, clearDrag]);
+      ghostPos.y < rect.bottom;
+    setDropTargetIndex(isOver ? index : null);
+    setIsDragOver(isOver);
+  }, [ghostPos, draggingCard, index, setDropTargetIndex]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();

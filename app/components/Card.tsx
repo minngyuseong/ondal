@@ -24,7 +24,15 @@ export default function Card({ card, index }: CardProps) {
   const [isDragging, setIsDragging] = useState(false);
   const dragStartTime = useRef<number>(0);
   const dragStartPos = useRef<{ x: number; y: number } | null>(null);
-  const { updateCard, setDraggingCard, setGhostPos, clearDrag } = useCards();
+  const {
+    updateCard,
+    setDraggingCard,
+    setGhostPos,
+    clearDrag,
+    dropTargetIndex,
+    setSelectedCard,
+    draggingCard,
+  } = useCards();
 
   // 기본 카드인지 확인 (index가 DEFAULT_CARDS_COUNT보다 작으면 기본 카드)
   const isDefaultCard = index < DEFAULT_CARDS_COUNT;
@@ -58,6 +66,9 @@ export default function Card({ card, index }: CardProps) {
   const handleTouchEnd = () => {
     setIsDragging(false);
     dragStartPos.current = null;
+    if (dropTargetIndex !== null && draggingCard) {
+      setSelectedCard(dropTargetIndex, draggingCard);
+    }
     clearDrag();
   };
 

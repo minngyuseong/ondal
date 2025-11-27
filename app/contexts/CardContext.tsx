@@ -20,6 +20,8 @@ interface CardContextType {
   setDraggingCard: (card: CardData | null, index: number | null) => void;
   setGhostPos: (pos: { x: number; y: number } | null) => void;
   clearDrag: () => void;
+  dropTargetIndex: number | null;
+  setDropTargetIndex: (index: number | null) => void;
 }
 
 const CardContext = createContext<CardContextType | undefined>(undefined);
@@ -95,6 +97,7 @@ export function CardProvider({ children }: { children: ReactNode }) {
   const [draggingCard, setDraggingCardState] = useState<CardData | null>(null);
   const [draggingCardIndex, setDraggingCardIndex] = useState<number | null>(null);
   const [ghostPos, setGhostPosState] = useState<{ x: number; y: number } | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
 
   const addCard = (card: CardData) => {
     setCards((prev) => [...prev, card]);
@@ -133,6 +136,7 @@ export function CardProvider({ children }: { children: ReactNode }) {
     setDraggingCardState(null);
     setDraggingCardIndex(null);
     setGhostPosState(null);
+    setDropTargetIndex(null);
   };
 
   return (
@@ -150,6 +154,8 @@ export function CardProvider({ children }: { children: ReactNode }) {
         setDraggingCard,
         setGhostPos,
         clearDrag,
+        dropTargetIndex,
+        setDropTargetIndex,
       }}
     >
       {children}
