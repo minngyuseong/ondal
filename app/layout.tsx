@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
 
@@ -19,19 +19,19 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "온달",
   },
-  themeColor: "#FF7848",
   icons: {
     icon: [{ url: "/logos/logo_icon.png" }],
     apple: [{ url: "/logos/logo_icon.png" }],
   },
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
+  themeColor: "#FF7848",
 };
 
 export default function RootLayout({

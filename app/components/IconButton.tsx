@@ -23,7 +23,7 @@ export default function IconButton({
       disabled={disabled}
       variant="outline"
       size="lg"
-      className="h-20 rounded-2xl bg-white px-6 py-4 shadow-md hover:scale-105 hover:shadow-lg active:scale-95 disabled:opacity-50"
+      className="h-20 w-60 rounded-2xl bg-white px-6 py-4 shadow-md hover:scale-105 hover:shadow-lg active:scale-95 disabled:opacity-50"
     >
       <span className="flex items-center justify-center gap-3">
         <Image src={icon} alt={alt} width={38} height={38} />

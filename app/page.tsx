@@ -23,8 +23,8 @@ function AppContent() {
             top: ghostPos.y - 50,
             pointerEvents: "none",
             zIndex: 1000,
-            width: 100,
-            height: 100,
+            width: 500,
+            height: 500,
             opacity: 0.7,
           }}
         >
