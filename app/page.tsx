@@ -19,8 +19,8 @@ function AppContent() {
         <div
           style={{
             position: "fixed",
-            left: ghostPos.x,
-            top: ghostPos.y,
+            left: ghostPos.x + 50,
+            top: ghostPos.y + 50,
             pointerEvents: "none",
             zIndex: 1000,
             width: 184,
