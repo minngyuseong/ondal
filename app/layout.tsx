@@ -41,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`antialiased ${pretendard.variable}`}>{children}</body>
+      <body className={`antialiased ${pretendard.variable} bg-primary-100`}>{children}</body>
     </html>
   );
 }
