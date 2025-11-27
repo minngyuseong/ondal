@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 export interface CardData {
   imageData: string;
@@ -21,7 +22,7 @@ interface CardContextType {
   setGhostPos: (pos: { x: number; y: number } | null) => void;
   clearDrag: () => void;
   dropTargetIndex: number | null;
-  setDropTargetIndex: (index: number | null) => void;
+  setDropTargetIndex: Dispatch<SetStateAction<number | null>>;
 }
 
 const CardContext = createContext<CardContextType | undefined>(undefined);

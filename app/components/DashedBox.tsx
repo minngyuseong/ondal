@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useCards, type CardData } from "../contexts/CardContext";
 import CardImage from "./CardImage";
 
@@ -9,8 +9,14 @@ interface DashedBoxProps {
 }
 
 export default function DashedBox({ index }: DashedBoxProps) {
-  const { selectedCards, setSelectedCard, draggingCard, ghostPos, setDropTargetIndex } = useCards();
-  const [isDragOver, setIsDragOver] = useState(false);
+  const {
+    selectedCards,
+    setSelectedCard,
+    draggingCard,
+    ghostPos,
+    dropTargetIndex,
+    setDropTargetIndex,
+  } = useCards();
   const boxRef = useRef<HTMLDivElement>(null);
 
   const card = selectedCards[index];
@@ -23,22 +29,25 @@ export default function DashedBox({ index }: DashedBoxProps) {
       ghostPos.x < rect.right &&
       ghostPos.y > rect.top &&
       ghostPos.y < rect.bottom;
-    setDropTargetIndex(isOver ? index : null);
-    setIsDragOver(isOver);
-  }, [ghostPos, draggingCard, index, setDropTargetIndex]);
+
+    // Only set the drop target to this index when the ghost is over this box.
+    // If not over this box, only clear the target if it was previously set to this box.
+    setDropTargetIndex((prev) => (isOver ? index : prev === index ? null : prev));
+
+    // no local setState here; dropTargetIndex drives highlight
+  }, [ghostPos, draggingCard, index, setDropTargetIndex, dropTargetIndex]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragOver(true);
   };
 
   const handleDragLeave = () => {
-    setIsDragOver(false);
+    // no-op: visual driven by dropTargetIndex
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragOver(false);
+    // visual is driven by dropTargetIndex; no local state to clear
 
     const cardDataString = e.dataTransfer.getData("cardData");
     if (cardDataString) {
@@ -62,7 +71,7 @@ export default function DashedBox({ index }: DashedBoxProps) {
         card
           ? "border-primary-70 hover:border-primary-90 border-4 border-solid hover:shadow-lg"
           : "border-4 border-dashed border-gray-300"
-      } ${isDragOver ? "border-primary-100 bg-primary-20" : ""} `}
+      } ${dropTargetIndex === index ? "border-primary-100 bg-primary-20" : ""} `}
     >
       {card ? (
         <CardImage card={card} />
