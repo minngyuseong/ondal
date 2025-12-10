@@ -12,6 +12,7 @@ interface CardContextType {
   cards: CardData[];
   addCard: (card: CardData) => void;
   updateCard: (index: number, card: CardData) => void;
+  deleteCard: (index: number) => void;
   selectedCards: (CardData | null)[];
   setSelectedCard: (boxIndex: number, cardOrNull: CardData | null) => void;
   resetSelectedCards: () => void;
@@ -112,6 +113,10 @@ export function CardProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const deleteCard = (index: number) => {
+    setCards((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const setSelectedCard = (boxIndex: number, cardOrNull: CardData | null) => {
     setSelectedCards((prev) => {
       const newSelected = [...prev];
@@ -146,6 +151,7 @@ export function CardProvider({ children }: { children: ReactNode }) {
         cards,
         addCard,
         updateCard,
+        deleteCard,
         selectedCards,
         setSelectedCard,
         resetSelectedCards,

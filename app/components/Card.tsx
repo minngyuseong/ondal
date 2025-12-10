@@ -26,6 +26,7 @@ export default function Card({ card, index }: CardProps) {
   const dragStartPos = useRef<{ x: number; y: number } | null>(null);
   const {
     updateCard,
+    deleteCard,
     setDraggingCard,
     setGhostPos,
     clearDrag,
@@ -77,6 +78,11 @@ export default function Card({ card, index }: CardProps) {
     setIsEditModalOpen(false);
   };
 
+  const handleDelete = () => {
+    deleteCard(index);
+    setIsEditModalOpen(false);
+  };
+
   const handleClick = () => {
     // 드래그 중이면 클릭 무시
     if (isDragging) return;
@@ -109,6 +115,7 @@ export default function Card({ card, index }: CardProps) {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         onSave={handleEdit}
+        onDelete={handleDelete}
         initialCard={card}
       />
     </>
@@ -120,11 +127,13 @@ function EditCardModal({
   isOpen,
   onClose,
   onSave,
+  onDelete,
   initialCard,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSave: (card: CardData) => void;
+  onDelete: () => void;
   initialCard: CardData;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -292,8 +301,8 @@ function EditCardModal({
 
         <DialogFooter className="gap-4">
           <DialogClose asChild>
-            <Button variant="outline" className="flex-1">
-              취소
+            <Button variant="destructive" onClick={onDelete} className="flex-1">
+              삭제
             </Button>
           </DialogClose>
           <DialogClose asChild>
